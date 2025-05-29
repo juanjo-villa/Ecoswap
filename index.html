@@ -3,136 +3,1366 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>EcoSwap - SRS</title>
-    <link rel="stylesheet" href="estilos.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoSwap - Especificación de Requisitos de Software (SRS)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2d3748;
+            background-color: #f7fafc;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo::before {
+            content: "♻";
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #dcfce7;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #059669, #10b981, #34d399);
+            color: white;
+            padding: 120px 0 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            100% {
+                transform: translateY(-100px);
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Estilos para la galería de imágenes */
+        .images-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            padding: 2rem 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .image-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            height: 500px;
+            width: 100%;
+        }
+
+        .image-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .image-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .cta-button {
+            background: white;
+            color: #059669;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #1f2937;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+            border-radius: 2px;
+        }
+
+        /* SRS Document Styles */
+        .srs-section {
+            background: white;
+            margin: 2rem 0;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #22c55e;
+        }
+
+        .srs-section h2 {
+            color: #059669;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .srs-section h3 {
+            color: #1f2937;
+            font-size: 1.4rem;
+            margin: 1.5rem 0 1rem 0;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+        }
+
+        .srs-section h4 {
+            color: #22c55e;
+            font-size: 1.2rem;
+            margin: 1rem 0 0.5rem 0;
+        }
+
+        .srs-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .srs-list li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #f1f5f9;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .srs-list li:last-child {
+            border-bottom: none;
+        }
+
+        .srs-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #22c55e;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .req-item {
+            background: #f8fafc;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            border-left: 4px solid #22c55e;
+        }
+
+        .req-item strong {
+            color: #059669;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 5px solid #22c55e;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            color: #1f2937;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        /* Requirements Section */
+        .requirements {
+            background: #f8fafc;
+        }
+
+        .req-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .req-category {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .req-category h3 {
+            color: #059669;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .req-list {
+            list-style: none;
+        }
+
+        .req-list li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #e5e7eb;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .req-list li:last-child {
+            border-bottom: none;
+        }
+
+        .req-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #22c55e;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            background: linear-gradient(135deg, #1f2937, #374151);
+            color: white;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .tech-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .tech-item h4 {
+            color: #22c55e;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Table Styles */
+        .srs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .srs-table th {
+            background: #22c55e;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .srs-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .srs-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .srs-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Log Events Table */
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            font-size: 0.9rem;
+        }
+
+        .log-table th {
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .log-table td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+
+        .log-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .log-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .log-table .data-type {
+            color: #6b7280;
+            font-size: 0.8rem;
+            font-style: italic;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .log-table .example {
+            color: #059669;
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+            padding: 0.3rem;
+            background: #ecfdf5;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* Footer */
+        footer {
+            background: #1f2937;
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            color: #22c55e;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section a {
+            color: #d1d5db;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #22c55e;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .req-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .srs-section {
+                padding: 1rem;
+            }
+
+            .log-table {
+                font-size: 0.8rem;
+            }
+
+            .log-table th,
+            .log-table td {
+                padding: 0.6rem;
+            }
+
+            .log-table .data-type,
+            .log-table .example {
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Highlight boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            border: 1px solid #22c55e;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .highlight-box h4 {
+            color: #059669;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Table responsive */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        /* Images Section */
+        .images-section {
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin: 2rem 0;
+        }
+
+        .images-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            padding: 2rem 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .image-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            height: 500px;
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+            background: #f8fafc;
+            padding: 1rem;
+        }
+
+        .image-card:hover img {
+            transform: scale(1.02);
+        }
+    </style>
 </head>
 
 <body>
     <header>
-        <h1>EcoSwap</h1>
-        <p>Especificación de Requisitos de Software (SRS)</p>
+        <nav class="container">
+            <div class="logo">EcoSwap SRS</div>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#introduccion">Introducción</a></li>
+                <li><a href="#descripcion">Descripción</a></li>
+                <li><a href="#requisitos">Requisitos</a></li>
+                <li><a href="#log-eventos">Log Eventos</a></li>
+                <li><a href="#tecnologia">Tecnología</a></li>
+                <li><a href="#imagenes">Diagramas</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <section>
-        <li>Juan Camilo Velez - 240220191003</li>
-        <li>Juan Sebastian Ayala - 240220211020</li>
-        <li>Juan Jose Villa Zamora - 240220221004</li>
+    <section id="inicio" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>EcoSwap</h1>
+                <p style="font-size: 1rem; opacity: 0.8;">Sistema web y móvil para incentivar el reciclaje mediante
+                    recompensas</p>
+                <a href="#introduccion" class="cta-button">Ver Especificación Completa</a>
+            </div>
+        </div>
     </section>
 
-    <section>
-        <h2>1. Introducción</h2>
-        <h3>1.1 Propósito</h3>
-        <p>EcoSwap es un sistema web y móvil diseñado para incentivar el reciclaje mediante un sistema de recompensas...
-        </p>
-
-        <h3>1.2 Alcance</h3>
-        <ul>
-            <li>Escanear residuos reciclables con visión artificial.</li>
-            <li>Depositar residuos en puntos de reciclaje asociados.</li>
-            <li>Acumular puntos</li>
-            <li>Escanear residuos reciclables con visión artificial.</li>
-            <li>Depositar residuos en puntos de reciclaje asociados.</li>
-            <li>Acumular puntos por cada acción de reciclaje.</li>
-            <li>Canjear puntos por descuentos o beneficios en comercios aliados.</li>
-            <li>Consultar su historial de reciclaje e impacto ambiental.</li>
 
 
-        </ul>
+    <!-- 1. INTRODUCCIÓN -->
+    <section id="introduccion" class="container fade-in">
+        <h2 class="section-title">1. Introducción</h2>
 
-        <!-- Repite la estructura para el resto de secciones -->
-    </section>
+        <div class="srs-section">
+            <h2>📋 1.1 Propósito</h2>
+            <p>EcoSwap es un sistema web y móvil diseñado para incentivar el reciclaje mediante un sistema de
+                recompensas. Los usuarios pueden escanear y depositar residuos reciclables a cambio de puntos, que
+                pueden canjear por descuentos en negocios locales.</p>
+        </div>
 
-    <section>
-        <h2>2. Beneficios</h2>
-        <ul>
-            <li>Promueve el reciclaje y la sostenibilidad.</li>
-            <li>Ofrece recompensas atractivas para los usuarios.</li>
-            <li>Fomenta la colaboración entre empresas y ciudadanos.</li>
-        </ul>
-    </section>
+        <div class="srs-section">
+            <h2>🎯 1.2 Alcance</h2>
+            <p>El sistema permitirá a los usuarios:</p>
+            <ul class="srs-list">
+                <li>Escanear residuos reciclables con visión artificial</li>
+                <li>Depositar residuos en puntos de reciclaje asociados</li>
+                <li>Acumular puntos por cada material reciclado</li>
+                <li>Canjear puntos por descuentos o beneficios en comercios aliados</li>
+                <li>Consultar su historial de reciclaje e impacto ambiental</li>
+            </ul>
+        </div>
 
-    <section>
-        <h2>3. Requisitos Funcionales</h2>
-        <ul>
-            <li>RF1: El sistema debe permitir el registro y autenticación de usuarios mediante correo electrónico y
-                contraseña.</li>
-
-            <li>RF2: El sistema debe permitir a los usuarios escanear residuos mediante la cámara del dispositivo y
-                visión artificial (IA).</li>
-
-            <li>RF3: El sistema debe clasificar automáticamente los residuos escaneados por tipo (plástico, vidrio,
-                etc.).</li>
-            <li>RF4: El sistema debe permitir a los usuarios depositar residuos en puntos de reciclaje asociados.</li>
-            <li>RF5: El sistema debe acumular puntos por cada acción de reciclaje realizada.</li>
-            <li>RF6: El sistema debe permitir a los usuarios canjear puntos por descuentos o beneficios en comercios
-                aliados.</li>
-            <li>RF7: El sistema debe mostrar un historial detallado del reciclaje del usuario, incluyendo fechas, tipos
-                de residuos y puntos ganados.</li>
-            <li>RF8: El sistema debe permitir a los administradores validar nuevos puntos de reciclaje y usuarios
-                especiales (como negocios aliados).</li>
-            <li>RF9: El sistema debe integrar un mapa interactivo con la ubicación de los puntos de reciclaje más
-                cercanos.</li>
-            <li>RF10: El sistema debe enviar notificaciones al usuario sobre promociones o beneficios disponibles en
-                comercios aliados.</li>
-
-
-        </ul>
-    </section>
-
-    <section>
-        <h2>4. Requisitos No Funcionales</h2>
-        <ul>
-            <li>RNF1: El tiempo de respuesta del sistema no debe superar los 2 segundos en dispositivos móviles
-                estándar.</li>
-            <li>RNF2: La disponibilidad del sistema debe ser del 99.5% mensual como mínimo.</li>
-            <li>RNF3: La interfaz de usuario debe ser accesible para personas con discapacidades visuales o motrices.
-            </li>
-            <li>RNF4: Los datos del usuario deben almacenarse cifrados y cumplir con la normativa de protección de datos
-                (por ejemplo, GDPR).</li>
-            <li>RNF5: El sistema debe ser compatible con Android 8 o superior y iOS 12 o superior.</li>
-            <li>RNF6: La aplicación debe funcionar en modo responsivo para ajustarse correctamente en móviles, tabletas
-                y
-                computadoras.</li>
-            <li>RNF7: La interfaz debe tener un diseño amigable con colores ecológicos y botones grandes para facilitar
-                la
-                navegación.</li>
-            <li>RNF8: Las actualizaciones del sistema no deben interrumpir el servicio durante más de 5 minutos.</li>
-            <li>RNF9: El sistema debe utilizar servicios en la nube (AWS o Google Cloud) para garantizar escalabilidad.
-            </li>
-            <li>RNF10: El sistema debe integrarse correctamente con APIs externas como Google Maps y TensorFlow Lite sin
-                errores críticos.</li>
-        </ul>
-    </section>
-
-    <section>
-        <div class="image-container">
-            <h2>Diagrama de clases</h2>
-            <div class="image-wrapper">
-                <img src="Images/Logo2.jpg" alt="Logo EcoSwap 2"
-                    style="height: 600px; margin-bottom:10px; border-radius:10px; box-shadow:0 2px 8px #388e3c33;">
+        <div class="srs-section">
+            <h2>📚 1.3 Definiciones, Acrónimos y Abreviaturas</h2>
+            <div class="table-container">
+                <table class="srs-table">
+                    <thead>
+                        <tr>
+                            <th>Término</th>
+                            <th>Definición</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>IA (Inteligencia Artificial)</strong></td>
+                            <td>Algoritmos de aprendizaje automático para reconocimiento de residuos</td>
+                        </tr>
+                        <tr>
+                            <td><strong>API (Interfaz de Programación de Aplicaciones)</strong></td>
+                            <td>Conjunto de funciones para interactuar con otros servicios</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Usuario</strong></td>
+                            <td>Persona que utiliza la aplicación para reciclar y obtener beneficios</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Negocios Aliados</strong></td>
+                            <td>Empresas que ofrecen beneficios a cambio de reciclaje</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <div class="image-container">
-            <h2>Diagrama de secuencia</h2>
-            <div class="image-wrapper">
-                <img src="Images/Logo1.jpg" alt="Logo EcoSwap"
-                    style="height:400px; margin-bottom:10px; border-radius:10px; box-shadow:0 2px 8px #388e3c33;">
+        <div class="srs-section">
+            <h2>📖 1.4 Referencias</h2>
+            <ul class="srs-list">
+                <li>IEEE 830-1998: Norma de especificación de requisitos de software</li>
+                <li>Google Maps API Documentation</li>
+                <li>TensorFlow Lite para visión artificial</li>
+            </ul>
+        </div>
+
+        <div class="srs-section">
+            <h2>📄 1.5 Descripción General</h2>
+            <p>Este documento especifica los requisitos funcionales y no funcionales del sistema EcoSwap, incluyendo
+                restricciones y dependencias.</p>
+        </div>
+    </section>
+
+    <!-- 2. DESCRIPCIÓN GENERAL -->
+    <section id="descripcion" class="container fade-in">
+        <h2 class="section-title">2. Descripción General</h2>
+
+        <div class="srs-section">
+            <h2>🌐 2.1 Perspectiva del Producto</h2>
+            <p>EcoSwap es una plataforma SaaS (Software como Servicio) que conecta usuarios con puntos de reciclaje y
+                comercios interesados en promover la economía circular.</p>
+
+            <div class="highlight-box">
+                <h4>Características Principales:</h4>
+                <p>Plataforma integral que combina tecnología de IA, gamificación y sostenibilidad para crear un
+                    ecosistema de reciclaje inteligente.</p>
             </div>
         </div>
 
-        <div class="image-container">
-            <h2>Diagrama de despliegue</h2>
-            <div class="image-wrapper">
-                <img src="Images/Logo3.jpeg" alt="Logo EcoSwap 3"
-                    style="height:400px; margin-bottom:10px; border-radius:10px; box-shadow:0 2px 8px #388e3c33;">
+        <div class="srs-section">
+            <h2>⚡ 2.2 Funcionalidades del Producto</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">👥</span>
+                    <h3>Registro de Usuarios</h3>
+                    <p>Registro e inicio de sesión de usuarios y negocios aliados</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🤖</span>
+                    <h3>Escaneo IA</h3>
+                    <p>Escaneo de residuos mediante inteligencia artificial</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🎯</span>
+                    <h3>Sistema de Puntos</h3>
+                    <p>Acumulación de puntos por reciclaje</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🎁</span>
+                    <h3>Canje de Recompensas</h3>
+                    <p>Canje de puntos en negocios participantes</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📊</span>
+                    <h3>Historial</h3>
+                    <p>Historial de reciclaje e impacto ambiental</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🗺</span>
+                    <h3>Mapas</h3>
+                    <p>Integración con mapas para localizar puntos de reciclaje</p>
+                </div>
             </div>
+        </div>
 
+        <div class="srs-section">
+            <h2>👤 2.3 Características de los Usuarios</h2>
+            <div class="req-grid">
+                <div class="req-category">
+                    <h3>👥 Usuarios Regulares</h3>
+                    <p>Personas que reciclan y obtienen beneficios por sus acciones sostenibles.</p>
+                    <ul class="srs-list">
+                        <li>Edad: 16-65 años</li>
+                        <li>Nivel tecnológico: Básico a intermedio</li>
+                        <li>Motivación: Beneficios económicos y conciencia ambiental</li>
+                    </ul>
+                </div>
+                <div class="req-category">
+                    <h3>🏪 Negocios Aliados</h3>
+                    <p>Comercios que ofrecen recompensas y promociones especiales.</p>
+                    <ul class="srs-list">
+                        <li>Tipo: Comercios locales y cadenas</li>
+                        <li>Objetivo: Atraer clientes conscientes del medio ambiente</li>
+                        <li>Beneficio: Marketing verde y responsabilidad social</li>
+                    </ul>
+                </div>
+                <div class="req-category">
+                    <h3>👨‍💼 Administradores</h3>
+                    <p>Gestionan la plataforma y validan nuevos puntos de reciclaje.</p>
+                    <ul class="srs-list">
+                        <li>Rol: Supervisión y mantenimiento del sistema</li>
+                        <li>Responsabilidades: Validación y moderación</li>
+                        <li>Acceso: Panel de administración completo</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="srs-section">
+            <h2>⚠ 2.4 Restricciones</h2>
+            <ul class="srs-list">
+                <li>El reconocimiento de residuos debe realizarse en dispositivos con cámara funcional</li>
+                <li>La acumulación de puntos está sujeta a validación automática y manual</li>
+                <li>Requiere conexión a internet para sincronizar datos en la nube</li>
+                <li>Los puntos tienen fecha de expiración para mantener la actividad del usuario</li>
+            </ul>
+        </div>
+
+        <div class="srs-section">
+            <h2>🔗 2.5 Suposiciones y Dependencias</h2>
+            <ul class="srs-list">
+                <li>Se integrará con Google Maps para la localización de puntos de reciclaje</li>
+                <li>Se usará TensorFlow Lite para el reconocimiento de imágenes</li>
+                <li>Los usuarios tendrán acceso a dispositivos con cámara y conexión a internet</li>
+                <li>Los negocios aliados mantendrán sus ofertas actualizadas</li>
+            </ul>
+        </div>
     </section>
 
+    <section id="requisitos" class="requirements fade-in">
+        <div class="container">
+            <h2 class="section-title">3. Requisitos Específicos</h2>
+
+            <!-- 3.1 Requisitos Funcionales -->
+            <div class="srs-section">
+                <h2>⚙ 3.1 Requisitos Funcionales</h2>
+
+                <div class="req-item">
+                    <strong>RF1:</strong> El sistema debe permitir el registro y autenticación de usuarios mediante
+                    correo electrónico y contraseña.
+                </div>
+
+                <div class="req-item">
+                    <strong>RF2:</strong> El sistema debe permitir a los usuarios escanear residuos mediante la cámara
+                    del dispositivo y visión artificial (IA).
+                </div>
+
+                <div class="req-item">
+                    <strong>RF3:</strong> El sistema debe clasificar automáticamente los residuos escaneados por tipo
+                    (plástico, vidrio, papel, metal, etc.).
+                </div>
+
+                <div class="req-item">
+                    <strong>RF4:</strong> El sistema debe asignar puntos automáticamente según el tipo y cantidad del
+                    residuo reciclado.
+                </div>
+
+                <div class="req-item">
+                    <strong>RF5:</strong> El usuario debe poder consultar su saldo actual de puntos acumulados en tiempo
+                    real.
+                </div>
+
+                <div class="req-item">
+                    <strong>RF6:</strong> El sistema debe permitir a los usuarios canjear puntos por beneficios en los
+                    negocios aliados.
+                </div>
+
+                <div class="req-item">
+                    <strong>RF7:</strong> El sistema debe mostrar un historial detallado del reciclaje del usuario,
+                    incluyendo fechas, tipos de residuos y puntos ganados.
+                </div>
+
+                <div class="req-item">
+                    <strong>RF8:</strong> El sistema debe permitir a los administradores validar nuevos puntos de
+                    reciclaje y usuarios especiales (como negocios aliados).
+                </div>
+
+                <div class="req-item">
+                    <strong>RF9:</strong> El sistema debe integrar un mapa interactivo con la ubicación de los puntos de
+                    reciclaje más cercanos.
+                </div>
+
+                <div class="req-item">
+                    <strong>RF10:</strong> El sistema debe enviar notificaciones al usuario sobre promociones o
+                    beneficios disponibles en comercios aliados.
+                </div>
+            </div>
+
+            <div class="srs-section">
+                <h2>🚀 3.2 Requisitos No Funcionales</h2>
+
+                <div class="req-item">
+                    <strong>RNF1:</strong> El tiempo de respuesta del sistema no debe superar los 2 segundos en
+                    dispositivos móviles estándar.
+                </div>
+
+                <div class="req-item">
+                    <strong>RNF2:</strong> La disponibilidad del sistema debe ser del 99.5% mensual como mínimo.
+                </div>
+
+                <div class="req-item">
+                    <strong>RNF3:</strong> La interfaz de usuario debe ser accesible para personas con discapacidades
+                    visuales o motrices.
+                </div>
+
+                <div class="req-item">
+                    <strong>RNF4:</strong> Los datos del usuario deben almacenarse cifrados y cumplir con la normativa
+                    de protección de datos (por ejemplo, GDPR).
+                </div>
+
+                <div class="req-item">
+                    <strong>RNF5:</strong> El sistema debe ser compatible con Android 8 o superior y iOS 12 o superior.
+                </div>
+
+                <div class="req-item">
+                    <strong>RNF6:</strong> La aplicación debe funcionar en modo responsivo para ajustarse correctamente
+                    en móviles, tabletas y computadoras.
+                </div>
+
+                <div class="req-item">
+                    <strong>RNF7:</strong> La interfaz debe tener un diseño amigable con colores ecológicos y botones
+                    grandes para facilitar la navegación.
+                </div>
+
+                <div class="req-item">
+                    <strong>RNF8:</strong> Las actualizaciones del sistema no deben interrumpir el servicio durante más
+                    de 5 minutos.
+                </div>
+
+                <div class="req-item">
+                    <strong>RNF9:</strong> El sistema debe utilizar servicios en la nube (AWS o Google Cloud) para
+                    garantizar escalabilidad.
+                </div>
+
+                <div class="req-item">
+                    <strong>RNF10:</strong> El sistema debe integrarse correctamente con APIs externas como Google Maps
+                    y TensorFlow Lite sin errores críticos.
+                </div>
+            </div>
+
+            <div class="srs-section">
+                <h2>🎨 3.3 Requisitos de Interfaz de Usuario</h2>
+                <div class="req-grid">
+                    <div class="req-category">
+                        <h3>📱 Diseño Responsivo</h3>
+                        <p>Diseño responsivo para web y móvil que se adapte automáticamente a diferentes tamaños de
+                            pantalla.</p>
+                    </div>
+                    <div class="req-category">
+                        <h3>🎯 Usabilidad</h3>
+                        <p>Botones grandes e intuitivos para acciones clave, facilitando la navegación para usuarios de
+                            todas las edades.</p>
+                    </div>
+                    <div class="req-category">
+                        <h3>🌿 Tema Ecológico</h3>
+                        <p>Temas de colores ecológicos y amigables que reflejen la misión sostenible de la aplicación.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NUEVA SECCIÓN: LOG DE EVENTOS DEL PROYECTO -->
+    <section id="log-eventos" class="container fade-in">
+        <h2 class="section-title">Log de Eventos del Proyecto</h2>
+
+        <div class="srs-section">
+            <h2>📊 Log de Eventos del Proyecto (Enfoque en Status Code)</h2>
+            <p>Esta tabla está diseñada para registrar eventos significativos, movimientos y posibles problemas dentro
+                del proyecto EcoSwap, prestando especial atención a los códigos de estado de las operaciones.</p>
+
+            <div class="highlight-box">
+                <h4>Nombre de la Tabla Sugerido: log_eventos_proyecto</h4>
+                <p>Esta tabla centraliza el registro de todas las operaciones críticas del sistema, facilitando el
+                    monitoreo, diagnóstico y auditoría de eventos.</p>
+            </div>
+
+            <div class="table-container">
+                <table class="log-table">
+                    <thead>
+                        <tr>
+                            <th>Columna</th>
+                            <th>Tipo de Dato</th>
+                            <th>Descripción</th>
+                            <th>Ejemplo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>id_log</strong></td>
+                            <td>
+                                <span class="data-type">UUID o BIGINT (Autoincremental)</span>
+                            </td>
+                            <td>Identificador único para el registro de log (Clave Primaria).</td>
+                            <td><span class="example">a1b2c3d4-e5f6-7890-1234-567890abcdef</span> o <span
+                                    class="example">2001</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>fecha_hora_evento</strong></td>
+                            <td>
+                                <span class="data-type">TIMESTAMP WITH TIME ZONE</span>
+                            </td>
+                            <td>Fecha y hora exactas (con zona horaria) en que ocurrió el evento.</td>
+                            <td><span class="example">2025-05-28 15:00:00-0500</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>componente_afectado</strong></td>
+                            <td>
+                                <span class="data-type">VARCHAR(100)</span>
+                            </td>
+                            <td>Módulo, funcionalidad, entidad o recurso específico del proyecto afectado por el evento.
+                            </td>
+                            <td><span class="example">'API_Usuarios'</span>, <span
+                                    class="example">'Modulo_Pagos'</span>, <span
+                                    class="example">'Registro_Cliente_ID123'</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>tipo_evento</strong></td>
+                            <td>
+                                <span class="data-type">VARCHAR(100)</span>
+                            </td>
+                            <td>Describe la acción o tipo de evento ocurrido (ej. 'CREACION_USUARIO',
+                                'ACTUALIZACION_PERFIL', 'PAGO_RECHAZADO', 'ACCESO_DENEGADO', 'ERROR_PROCESO_BATCH',
+                                'TAREA_PROGRAMADA_FIN').</td>
+                            <td><span class="example">'ACTUALIZACION_PERFIL'</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>id_usuario_o_sistema</strong></td>
+                            <td>
+                                <span class="data-type">VARCHAR(50)</span>
+                            </td>
+                            <td>Identificador del usuario que realizó la acción, o un identificador para procesos
+                                automáticos del sistema (ej. 'SISTEMA', 'CRON_JOB_X').</td>
+                            <td><span class="example">'juan.perez'</span>, <span
+                                    class="example">'SISTEMA_CRON_FACTURACION'</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>status_code_operacion</strong></td>
+                            <td>
+                                <span class="data-type">INT</span>
+                            </td>
+                            <td>Código numérico que representa el estado o resultado de la operación. Puede ser un
+                                código HTTP (si aplica), un código de salida de un script, o un código interno definido
+                                por el proyecto.</td>
+                            <td><span class="example">200</span> (OK HTTP), <span class="example">401</span> (No
+                                Autorizado HTTP), <span class="example">503</span> (Servicio No Disponible), <span
+                                    class="example">0</span> (Éxito Proceso Interno), <span class="example">3001</span>
+                                (Error Validación Interno)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>descripcion_status</strong></td>
+                            <td>
+                                <span class="data-type">VARCHAR(255)</span>
+                            </td>
+                            <td>Descripción textual clara y concisa del status_code_operacion.</td>
+                            <td><span class="example">"El perfil del usuario fue actualizado correctamente."</span>,
+                                <span class="example">"Error interno del servidor al procesar la solicitud."</span>,
+                                <span class="example">"El proceso de facturación nocturna finalizó sin errores."</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>mensaje_detallado</strong></td>
+                            <td>
+                                <span class="data-type">TEXT</span>
+                            </td>
+                            <td>Detalles adicionales sobre el evento, incluyendo datos relevantes para el diagnóstico,
+                                valores cambiados (si aplica), o mensajes de error específicos (ej. stack trace).</td>
+                            <td><span class="example">"Cambio de email para usuario 'juan.perez' de 'old@example.com' a
+                                    'new@example.com'."</span>, <span class="example">"NullPointerException en
+                                    com.proyecto.ModuloPagos.procesar() linea 42"</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>ip_origen</strong></td>
+                            <td>
+                                <span class="data-type">VARCHAR(45)</span>
+                            </td>
+                            <td>(Opcional) Dirección IP desde la cual se originó la solicitud o el evento, si es
+                                relevante (especialmente para acciones de usuario).</td>
+                            <td><span class="example">'192.168.1.100'</span>, <span
+                                    class="example">'2001:0db8:85a3:0000:0000:8a2e:0370:7334'</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="highlight-box">
+                <h4>Implementación y Uso:</h4>
+                <p>Esta tabla de registro es fundamental para:</p>
+                <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                    <li>Monitoreo en tiempo real del estado del sistema</li>
+                    <li>Auditoría de acciones de usuarios y procesos</li>
+                    <li>Diagnóstico de problemas y errores</li>
+                    <li>Análisis de patrones de uso y comportamiento</li>
+                    <li>Cumplimiento de requisitos de seguridad y normativas</li>
+                </ul>
+            </div>
+
+            <h3>Ejemplos de Registros</h3>
+            <div class="table-container">
+                <table class="srs-table">
+                    <thead>
+                        <tr>
+                            <th>id_log</th>
+                            <th>fecha_hora_evento</th>
+                            <th>componente_afectado</th>
+                            <th>tipo_evento</th>
+                            <th>status_code</th>
+                            <th>descripcion_status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1001</td>
+                            <td>2025-05-28 14:30:22-0500</td>
+                            <td>API_Usuarios</td>
+                            <td>REGISTRO_USUARIO</td>
+                            <td>201</td>
+                            <td>Usuario registrado exitosamente</td>
+                        </tr>
+                        <tr>
+                            <td>1002</td>
+                            <td>2025-05-28 14:35:10-0500</td>
+                            <td>Modulo_Escaneo</td>
+                            <td>ESCANEO_RESIDUO</td>
+                            <td>200</td>
+                            <td>Residuo plástico identificado correctamente</td>
+                        </tr>
+                        <tr>
+                            <td>1003</td>
+                            <td>2025-05-28 14:40:05-0500</td>
+                            <td>Modulo_Puntos</td>
+                            <td>ASIGNACION_PUNTOS</td>
+                            <td>200</td>
+                            <td>10 puntos asignados al usuario</td>
+                        </tr>
+                        <tr>
+                            <td>1004</td>
+                            <td>2025-05-28 15:05:30-0500</td>
+                            <td>API_Autenticacion</td>
+                            <td>INTENTO_LOGIN</td>
+                            <td>401</td>
+                            <td>Credenciales incorrectas</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="tecnologia" class="tech-stack fade-in">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">Stack Tecnológico</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <h4>Frontend Web</h4>
+                    <p>React.js<br>React Native<br>Progressive Web App</p>
+                </div>
+                <div class="tech-item">
+                    <h4>Móvil</h4>
+                    <p>Android 8+<br>iOS 12+<br>Native Base UI</p>
+                </div>
+                <div class="tech-item">
+                    <h4>Backend</h4>
+                    <p>Flask/FastAPI<br>Python 3.9+<br>RESTful APIs</p>
+                </div>
+                <div class="tech-item">
+                    <h4>Base de Datos</h4>
+                    <p>PostgreSQL<br>Redis (Cache)<br>MongoDB (Logs)</p>
+                </div>
+                <div class="tech-item">
+                    <h4>Infraestructura</h4>
+                    <p>AWS<br>Google Cloud<br>Docker Containers</p>
+                </div>
+                <div class="tech-item">
+                    <h4>Monitoreo</h4>
+                    <p>Prometheus<br>Grafana<br>ELK Stack</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container fade-in">
+        <h2 class="section-title">4. Apéndices</h2>
+
+        <div class="srs-section">
+            <h2>📊 4.1 Diagramas de Flujo de Interacción</h2>
+            <p>Los diagramas de flujo muestran la interacción del usuario con el sistema:</p>
+            <ol style="padding-left: 2rem; line-height: 2;">
+                <li>Usuario abre la aplicación y se autentica</li>
+                <li>Escanea un residuo con la cámara del dispositivo</li>
+                <li>IA procesa la imagen y clasifica el residuo automáticamente</li>
+                <li>Sistema asigna puntos según el tipo y cantidad</li>
+                <li>Usuario confirma el depósito en punto de reciclaje</li>
+                <li>Puntos se acreditan en la cuenta del usuario</li>
+                <li>Usuario puede canjear puntos por recompensas</li>
+            </ol>
+        </div>
+
+        <div class="srs-section">
+            <h2>📋 4.2 Casos de Uso Detallados</h2>
+            <div class="highlight-box">
+                <h4>Caso de Uso Principal: Reciclaje de Residuo</h4>
+                <p><strong>Actor:</strong> Usuario registrado</p>
+                <p><strong>Precondición:</strong> Usuario autenticado con cámara funcional</p>
+                <p><strong>Flujo Principal:</strong></p>
+                <ol style="padding-left: 2rem;">
+                    <li>Usuario selecciona "Escanear Residuo"</li>
+                    <li>Sistema activa la cámara</li>
+                    <li>Usuario enfoca el residuo y toma foto</li>
+                    <li>IA analiza y clasifica el residuo</li>
+                    <li>Sistema muestra tipo detectado y puntos a ganar</li>
+                    <li>Usuario confirma y deposita en punto de reciclaje</li>
+                    <li>Sistema acredita puntos en la cuenta</li>
+                </ol>
+                <p><strong>Postcondición:</strong> Puntos acreditados y registro en historial</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN DE IMÁGENES -->
+    <section id="imagenes" class="container fade-in">
+        <h2 class="section-title">Diagramas</h2>
+        <div class="images-grid">
+            <div class="image-card">
+
+                <img src="Images/Logo1.jpg" alt="Logo 1 de EcoSwap" loading="lazy">
+            </div>
+            <div class="image-card">
+                <img src="Images/Logo2.jpg" alt="Logo 2 de EcoSwap" loading="lazy">
+            </div>
+            <div class="image-card">
+                <img src="Images/Logo3.jpeg" alt="Logo 3 de EcoSwap" loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <section class="container fade-in">
+        <h2 class="section-title">Impacto Esperado</h2>
+        <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: center;">
+            <div
+                style="background: linear-gradient(135deg, #22c55e, #16a34a); color: white; padding: 2rem; border-radius: 15px;">
+                <h3 style="font-size: 2.5rem; margin-bottom: 0.5rem;">1M+</h3>
+                <p>Residuos Reciclados Objetivo</p>
+            </div>
+            <div
+                style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; padding: 2rem; border-radius: 15px;">
+                <h3 style="font-size: 2.5rem; margin-bottom: 0.5rem;">50K+</h3>
+                <p>Usuarios Activos Meta</p>
+            </div>
+            <div
+                style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 2rem; border-radius: 15px;">
+                <h3 style="font-size: 2.5rem; margin-bottom: 0.5rem;">500+</h3>
+                <p>Comercios Aliados</p>
+            </div>
+            <div
+                style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; padding: 2rem; border-radius: 15px;">
+                <h3 style="font-size: 2.5rem; margin-bottom: 0.5rem;">99.5%</h3>
+                <p>Disponibilidad SLA</p>
+            </div>
+        </div>
+    </section>
+    <br>
+    <br>
     <footer>
-        <h1>EcoSwap</h1>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>EcoSwap SRS</h4>
+                    <p>Especificación completa de requisitos de software para el sistema de reciclaje inteligente.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Documentación</h4>
+                    <a href="#introduccion">Introducción</a>
+                    <a href="#descripcion">Descripción General</a>
+                    <a href="#requisitos">Requisitos Específicos</a>
+                    <a href="#log-eventos">Log de Eventos</a>
+                    <a href="#tecnologia">Stack Tecnológico</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Estándares</h4>
+                    <a href="#">IEEE 830-1998</a>
+                    <a href="#">GDPR Compliance</a>
+                    <a href="#">Accesibilidad WCAG</a>
+                    <a href="#">ISO 27001</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto Técnico</h4>
+                    <a href="#">Equipo de Desarrollo</a>
+                    <a href="#">Arquitectura de Software</a>
+                    <a href="#">Control de Calidad</a>
+                    <a href="#">Documentación</a>
+                </div>
+            </div>
+            <div style="border-top: 1px solid #374151; padding-top: 2rem; margin-top: 2rem;">
+                <p>&copy; 2025 EcoSwap SRS. Especificación de Requisitos de Software | IEEE 830-1998 Compliant 📋</p>
+            </div>
+        </div>
     </footer>
+
+    <script>
+        // Opciones del observador de intersección
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        // Crear observador para animaciones
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0.2s';
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observar elementos con animación
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Navegación suave
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Resaltar sección activa en navegación
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-links a');
+
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === #${ current }) {
+                link.classList.add('active');
+            }
+        });
+        });
+    </script>
 </body>
 
 </html>
